@@ -12,17 +12,24 @@ class BookListViewController: UIViewController {
     private let dataService = DataService()
     
     override func viewDidLoad() {
+        //        super.viewDidLoad()
         super.viewDidLoad()
         
-        let bookData = dataService.bookData
-        //        print(type(of: bookData))
-        configureUI(bookData)
+        do{
+            let bookData = try dataService.loadBooks()
+            configureUI(bookData)
+        } catch {
+            print(error)
+            // 메인 쓰레드 다음 런루프 싸이클에 작업할당
+            DispatchQueue.main.async {
+                let alert = AlertFactory.alert(for: error)
+                self.present(alert, animated: true)
+            }
+        }
+        
     }
     
-    
-    
-    
-    //
+      
     private func configureUI(_ book: [Book]){
         print("어플리케이션 동작 시작")
         
