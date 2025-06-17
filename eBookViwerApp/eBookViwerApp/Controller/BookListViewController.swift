@@ -30,23 +30,28 @@ class BookListViewController: UIViewController {
     }
     
       
-    private func configureUI(_ book: [Book]){
+    private func configureUI(_ books: [Book]){
         print("어플리케이션 동작 시작")
+        
+        
+        let decoratedBooks = books.enumerated().map { index, book in
+            DecoratedBook(book: book, index: index)
+        }
+//        print(decoratedBooks[0])
         
         view.backgroundColor = .white
         
         //제목 라벨
         let titleLabel = BookTitleLabel()
-        titleLabel.setup(book[0])
+        titleLabel.setup(decoratedBooks[6])
         view.addSubview(titleLabel)
         
         let indexButton = BookIndexButton()
         view.addSubview(indexButton)
         
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "harrypotter1") // 정확한 이름 확인
-        imageView.contentMode = .scaleAspectFit
-        view.addSubview(imageView)
+        let bookInfoStackView = BookInfoStackView()
+        bookInfoStackView.setup(decoratedBooks[6])
+        view.addSubview(bookInfoStackView)
         
         titleLabel.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
@@ -60,11 +65,9 @@ class BookListViewController: UIViewController {
             // TODO 좌우 제약은 스택뷰에 1~7 버튼 만들 때 구현
         }
         
-        imageView.snp.makeConstraints {
+        bookInfoStackView.snp.makeConstraints {
             $0.top.equalTo(indexButton.snp.bottom).offset(10)
-            $0.centerX.equalToSuperview()
-            $0.width.equalTo(100)
-            $0.height.equalTo(150)
+            $0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(5)
         }
     }
 }

@@ -20,8 +20,8 @@ final class BookTitleLabel: UILabel {
     }
     
     // 라벨 속성
-    func setup(_ book: Book) {
-        self.text = book.title
+    func setup(_ decoratedBook: DecoratedBook) {
+        self.text = decoratedBook.book.title
         self.textColor = .black
         self.font = .boldSystemFont(ofSize: 24)
         self.textAlignment = .center
