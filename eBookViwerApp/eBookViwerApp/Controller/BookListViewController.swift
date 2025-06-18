@@ -53,6 +53,11 @@ class BookListViewController: UIViewController {
         bookInfoStackView.setup(decoratedBooks[0])
         view.addSubview(bookInfoStackView)
 
+        // 책 설명 스택 뷰
+        let descriptionStackView = DescriptionStackView()
+        descriptionStackView.setup(decoratedBooks[0])
+        view.addSubview(descriptionStackView)
+
         // 오토 레이아웃 정의
 
         titleLabel.snp.makeConstraints {
@@ -73,6 +78,11 @@ class BookListViewController: UIViewController {
 
         bookInfoStackView.snp.makeConstraints {
             $0.top.equalTo(indexButton.snp.bottom).offset(10)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+
+        descriptionStackView.snp.makeConstraints {
+            $0.top.equalTo(bookInfoStackView.snp.bottom).offset(24)
             $0.leading.trailing.equalToSuperview().inset(20)
         }
     }

@@ -12,7 +12,7 @@ final class BookInfoStackView: UIStackView {
     private let bookImage = UIImageView()
     private let textStackView = UIStackView()
 
-    private var titleLabel = UILabel()
+    private let titleLabel = UILabel()
     private let authorLabel = UILabel()
     private let releaseDateLabel = UILabel()
     private let pageCountLabel = UILabel()
@@ -26,15 +26,17 @@ final class BookInfoStackView: UIStackView {
     }
 
     func setup(_ decoratedBook: DecoratedBook) {
-        
+        // 동적 구성시 상위 스택 뷰 중복 제거 코드
+        arrangedSubviews.forEach { $0.removeFromSuperview() }
+
         axis = .horizontal // 왼쪽 -> 오른쪽 구성
-        spacing = 8  // 스택 뷰 내 요소들 사이의 간격
+        spacing = 8 // 스택 뷰 내 요소들 사이의 간격
         alignment = .top // 내부 요소들의 정렬 기준선 : 위쪽
-        distribution = .fill  // 각 요소의 고유 크기 유지
+        distribution = .fill // 각 요소의 고유 크기 유지
 
         // 책 이미지 설정
         bookImage.image = UIImage(named: decoratedBook.imageName)
-        bookImage.contentMode = .scaleAspectFit //비율 유지 + 전체 보이게
+        bookImage.contentMode = .scaleAspectFit // 비율 유지 + 전체 보이게
         bookImage.snp.makeConstraints {
             $0.width.equalTo(100)
             $0.height.equalTo(150)
