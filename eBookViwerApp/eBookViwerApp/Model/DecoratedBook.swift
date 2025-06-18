@@ -6,31 +6,29 @@
 //
 import Foundation
 
+// Book객체에 UI에서 쓸 데이터를 추가 가공
 struct DecoratedBook {
-    let book: Book          // 원본 Book 데이터
-    let volumeText: String  // "1", "2", ... (권수 정보)
-    let imageName: String   // "harrypotter1", "harrypotter2", ...
-    
+    let book: Book // 원본 Book 데이터
+    let volumeText: String // "1", "2", ... (권수 정보)
+    let imageName: String // "harrypotter1", "harrypotter2", ...
+
     init(book: Book, index: Int) {
         self.book = book
-        self.volumeText = "\(index + 1)"
-        self.imageName = "harrypotter\(index + 1)"
+        volumeText = "\(index + 1)"
+        imageName = "harrypotter\(index + 1)"
     }
-    
-    func dateFormat(_ dateString: String) -> String{
+
+    // JSON의 날짜 포맷을 MMMM d, yyyy로 변환
+    func dateFormat(_ dateString: String) -> String {
         let inputDateFormatter = DateFormatter()
         inputDateFormatter.dateFormat = "yyyy-MM-dd"
-        
+
         let outputDateFormatter = DateFormatter()
         outputDateFormatter.dateFormat = "MMMM d, yyyy"
-        
+
         if let date = inputDateFormatter.date(from: dateString) {
             return outputDateFormatter.string(from: date)
         }
         return dateString
     }
 }
-
-
-
-
