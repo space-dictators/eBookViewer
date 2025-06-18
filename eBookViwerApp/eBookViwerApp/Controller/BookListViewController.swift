@@ -48,18 +48,29 @@ class BookListViewController: UIViewController {
         let indexButton = BookIndexButton()
         view.addSubview(indexButton)
 
+        // 스크롤 뷰
+        let scrollContainer = ScrollContainerView()
+        view.addSubview(scrollContainer)
+
         // 책정보 스택 뷰
         let bookInfoStackView = BookInfoStackView()
         bookInfoStackView.setup(decoratedBooks[0])
-        view.addSubview(bookInfoStackView)
 
         // 책 설명 스택 뷰
         let descriptionStackView = DescriptionStackView()
         descriptionStackView.setup(decoratedBooks[0])
-        view.addSubview(descriptionStackView)
+
+        // 챕터 스택 뷰
+        let chapterStackView = ChapterStackView()
+        chapterStackView.setup(decoratedBooks[0])
+
+        // 스크롤 뷰에 위 세개 스택뷰 추가
+        let scrollviewList = [bookInfoStackView, descriptionStackView, chapterStackView]
+        for item in scrollviewList {
+            scrollContainer.contentStackView.addArrangedSubview(item)
+        }
 
         // 오토 레이아웃 정의
-
         titleLabel.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
             $0.leading.trailing.equalToSuperview().inset(20)
@@ -76,14 +87,10 @@ class BookListViewController: UIViewController {
              */
         }
 
-        bookInfoStackView.snp.makeConstraints {
+        scrollContainer.snp.makeConstraints {
             $0.top.equalTo(indexButton.snp.bottom).offset(10)
-            $0.leading.trailing.equalToSuperview().inset(20)
-        }
-
-        descriptionStackView.snp.makeConstraints {
-            $0.top.equalTo(bookInfoStackView.snp.bottom).offset(24)
-            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            $0.bottom.equalToSuperview()
         }
     }
 }

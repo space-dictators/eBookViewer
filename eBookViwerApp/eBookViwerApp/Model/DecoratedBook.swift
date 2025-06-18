@@ -32,3 +32,10 @@ struct DecoratedBook {
         return dateString
     }
 }
+
+extension DecoratedBook {
+    // 챕터 제목들을 배열로 가공
+    var chapterArray: [String] {
+        book.chapters.map { "\($0.title)" }
+    }
+}

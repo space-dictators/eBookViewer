@@ -21,6 +21,7 @@ final class DescriptionStackView: UIStackView {
         super.init(frame: frame)
     }
 
+    @available(*, unavailable)
     required init(coder: NSCoder) {
         super.init(coder: coder)
     }
@@ -29,9 +30,9 @@ final class DescriptionStackView: UIStackView {
         // 동적 구성시 상위 스택 뷰 중복 제거 코드
         arrangedSubviews.forEach { $0.removeFromSuperview() }
 
-        axis = .vertical // 왼쪽 -> 오른쪽 구성
+        axis = .vertical // 위 -> 아래 구성
         spacing = 24 // 스택 뷰 내 요소들 사이의 간격
-        alignment = .top // 내부 요소들의 정렬 기준선 : 위쪽
+        alignment = .leading // 내부 요소들의 정렬 기준선 : 왼쪽
         distribution = .fill // 각 요소의 고유 크기 유지
 
         // Dedicaton 설정들
