@@ -9,6 +9,7 @@ import UIKit
 
 // 시리즈 순서 인덱스 버튼
 final class BookIndexButton: UIButton {
+    private(set) var index: Int = 0
     // 초기 설정용 메서드
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -21,10 +22,20 @@ final class BookIndexButton: UIButton {
     }
 
     func setup() {
-        setTitle("1", for: .normal)
+//        setTitle("1", for: .normal)
         titleLabel?.font = .systemFont(ofSize: 16)
-        backgroundColor = .systemBlue
+//        backgroundColor = .systemBlue
         clipsToBounds = true
+    }
+    
+    func configure(with index: Int){
+        self.index = index
+        setTitle(String(index), for: .normal)
+    }
+    
+    func updateSelection(isSelected: Bool){
+        backgroundColor = isSelected ? .systemBlue : .systemGray5
+        setTitleColor(isSelected ? .white : .systemBlue, for: .normal)
     }
 
     // 버튼이 레이아웃되는 시점 layoutSubviews 호출(콜백처럼)

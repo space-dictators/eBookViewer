@@ -20,6 +20,7 @@ final class SummaryToggleController {
     func toggle() {
         // 토글 후 상태 저장
         isExpanded.toggle()
+        print("isExpanded: \(isExpanded), key: \(key)")
         UserDefaults.standard.set(isExpanded, forKey: key)
     }
 }

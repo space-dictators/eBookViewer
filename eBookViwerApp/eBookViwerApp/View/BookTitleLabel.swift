@@ -28,4 +28,8 @@ final class BookTitleLabel: UILabel {
         textAlignment = .center
         numberOfLines = 0 // 텍스트 줄 수를 제한하지 않음 -> 줄바꿈 허용, 모든 글자 출력
     }
+    
+    func updateLabel(){
+        
+    }
 }

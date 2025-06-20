@@ -9,7 +9,17 @@ import SnapKit
 import UIKit
 
 class BookListViewController: UIViewController {
+   
     private let dataService = DataService()
+    private var decoratedBooks: [DecoratedBook] = []
+    
+    let titleLabel = BookTitleLabel()
+    let indexBar = BookIndexBarView()
+    let scrollContainer = ScrollContainerView()
+    let bookInfoStackView = BookInfoStackView()
+    let descriptionStackView = DescriptionStackView()
+    let chapterStackView = ChapterStackView()
+    
 
     override func viewDidLoad() {
         
@@ -18,6 +28,7 @@ class BookListViewController: UIViewController {
         do {
             let bookData = try dataService.loadBooks()
             configureUI(bookData)
+                
         } catch {
             print(error)
             // 메인 쓰레드 다음 런루프 싸이클에 작업할당
@@ -29,45 +40,86 @@ class BookListViewController: UIViewController {
     }
 
     private func configureUI(_ books: [Book]) {
-        print("어플리케이션 동작 시작")
 
         // UI에 사용하기 위해 데이터 추가 가공
-        let decoratedBooks = books.enumerated().map { index, book in
+        decoratedBooks = books.enumerated().map { index, book in
             DecoratedBook(book: book, index: index)
         }
-
         // 배경색
         view.backgroundColor = .white
+        
+        //마지막에 본 권수 취득
+        let savedVolume = UserDefaults.standard.integer(forKey: "LastSelectedVolume")
+        // 값이 없으면 0 → 그 경우 1로 대체
+        let initialVolume = (savedVolume == 0) ? 1 : savedVolume
+        
+        //인덱스바 셋업
+        indexBar.setup(volumeCount: decoratedBooks.count, initialVolume: initialVolume)
+        
+        indexBar.didSelectVolume = { [weak self] selectedVolume in
+            guard let self else { return }
+            // 선택된 버튼만 파란색으로
+            indexBar.updateSelectedIndex(to: selectedVolume)
+            // 마지막에 열람한 권수 저장
+            UserDefaults.standard.set(selectedVolume, forKey: "LastSelectedVolume")
+            // 뷰 바꾸는 함수 실행
+            print(UserDefaults.standard.integer(forKey: "LastSelectedVolume"))
+            updateBookListView(for: selectedVolume)
+        }
 
-        // 제목 라벨
-        let titleLabel = BookTitleLabel()
-        titleLabel.setup(decoratedBooks[0])
         view.addSubview(titleLabel)
-
-        // 인덱스 버튼
-        let indexButton = BookIndexButton()
-        view.addSubview(indexButton)
-
-        // 스크롤 뷰
-        let scrollContainer = ScrollContainerView()
+        view.addSubview(indexBar)
         view.addSubview(scrollContainer)
 
-        // 책정보 스택 뷰
-        let bookInfoStackView = BookInfoStackView()
-        bookInfoStackView.setup(decoratedBooks[0])
 
-        // 책 설명 스택 뷰
-        let descriptionStackView = DescriptionStackView()
+        // 스크롤 뷰에 위 세개 스택뷰 추가
+        let scrollviewList = [bookInfoStackView, descriptionStackView, chapterStackView]
+        for item in scrollviewList {
+            scrollContainer.contentStackView.addArrangedSubview(item)
+        }
 
+        // 오토 레이아웃 정의
+        titleLabel.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+
+      
+        indexBar.snp.makeConstraints {
+            $0.top.equalTo(titleLabel.snp.bottom).offset(16)
+            $0.leading.greaterThanOrEqualToSuperview().offset(20)
+            $0.trailing.lessThanOrEqualToSuperview().offset(-20)
+            $0.centerX.equalToSuperview()
+            $0.height.equalTo(40)
+        }
+
+        scrollContainer.snp.makeConstraints {
+            $0.top.equalTo(indexBar.snp.bottom).offset(16)
+            $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            $0.bottom.equalToSuperview()
+            
+        }
+        
+        updateBookListView(for: initialVolume)
+    }
+    
+    // 뷰 업데이트 함수
+    private func updateBookListView(for volume: Int){
+        
+        // 객체 인덱스 첫번째는 0이기 때문에 -1 변수 생성
+        let index = volume - 1
+        let book = decoratedBooks[index]
+        titleLabel.setup(book)
+        bookInfoStackView.setup(book)
+        
         // 토글 관련 처리
-
         // 토글 컨트롤러 객체 생성
-        let summaryToggle = SummaryToggleController(volumText: decoratedBooks[0].volumeText)
+        let summaryToggle = SummaryToggleController(volumText: book.volumeText)
 
         // 처리용 변수에 값 할당
         let isExpanded = summaryToggle.isExpanded
-        let fullText = decoratedBooks[0].book.summary
-        let foldedText = decoratedBooks[0].foldedSummary
+        let fullText = book.book.summary
+        let foldedText = book.foldedSummary
 
         // SummaryViewModel 객체 생성
         let summaryViewModel: SummaryViewModel
@@ -103,41 +155,9 @@ class BookListViewController: UIViewController {
                 toggleAction: toggleAction
             )
         }
-
-        // descriptionStackView의 setup함수에 전달
-        descriptionStackView.setup(decoratedBooks[0], summaryViewModel: summaryViewModel)
-
-        // 챕터 스택 뷰
-        let chapterStackView = ChapterStackView()
-        chapterStackView.setup(decoratedBooks[0])
-
-        // 스크롤 뷰에 위 세개 스택뷰 추가
-        let scrollviewList = [bookInfoStackView, descriptionStackView, chapterStackView]
-        for item in scrollviewList {
-            scrollContainer.contentStackView.addArrangedSubview(item)
-        }
-
-        // 오토 레이아웃 정의
-        titleLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
-            $0.leading.trailing.equalToSuperview().inset(20)
-        }
-
-        indexButton.snp.makeConstraints {
-            $0.size.equalTo(32)
-            $0.top.equalTo(titleLabel.snp.bottom).offset(10)
-            $0.centerX.equalToSuperview()
-            /*
-             TODO: 좌우 제약은 1~7로 버튼 늘어날 때 구현
-             슈퍼뷰로부터 20이상 차이나는 조건은 아래를 참고해서 구현
-             lessThanOrEqualTo, greaterThanOrEqualTo
-             */
-        }
-
-        scrollContainer.snp.makeConstraints {
-            $0.top.equalTo(indexButton.snp.bottom).offset(10)
-            $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
-            $0.bottom.equalToSuperview()
-        }
+        
+        descriptionStackView.setup(book, summaryViewModel: summaryViewModel)
+        chapterStackView.setup(book)
+        
     }
 }

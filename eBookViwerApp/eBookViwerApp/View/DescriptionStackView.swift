@@ -93,7 +93,10 @@ final class DescriptionStackView: UIStackView {
             summaryToggleButton.titleLabel?.font = .systemFont(ofSize: 14)
             summaryToggleButton.setTitleColor(.systemBlue, for: .normal)
         }
-
+        
+        //갱신 전 이전 액션을 지워야 한다.
+        summaryToggleButton.removeTarget(nil, action: nil, for: .allEvents)
+//        
         if let action = summaryViewModel.toggleAction {
             summaryToggleButton.addAction(action, for: .touchUpInside)
         }
