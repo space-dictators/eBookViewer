@@ -109,7 +109,7 @@ class BookListViewController: UIViewController {
         // 객체 인덱스 첫번째는 0이기 때문에 -1 변수 생성
         let index = volume - 1
         let book = decoratedBooks[index]
-        titleLabel.setup(book)
+        titleLabel.updateTitleLabel(book)
         bookInfoStackView.setup(book)
         
         // 토글 관련 처리
