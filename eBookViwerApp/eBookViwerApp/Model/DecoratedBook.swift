@@ -16,7 +16,11 @@ struct DecoratedBook {
     let foldedSummary: String
 
     init(book: Book, index: Int) {
+       
+        // 원본 JOSN 파싱은 book에 저장
         self.book = book
+        
+        //UI용 가공 데이터
         volumeText = "\(index + 1)"
         imageName = "harrypotter\(index + 1)"
         chapterArray = book.chapters.map { "\($0.title)" }

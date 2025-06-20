@@ -108,18 +108,18 @@ class BookListViewController: UIViewController {
         
         // 객체 인덱스 첫번째는 0이기 때문에 -1 변수 생성
         let index = volume - 1
-        let book = decoratedBooks[index]
-        titleLabel.updateTitleLabel(book)
-        bookInfoStackView.setup(book)
+        let decoratedBook = decoratedBooks[index]
+        titleLabel.updateTitleLabel(decoratedBook)
+        bookInfoStackView.updateBookInfo(decoratedBook)
         
         // 토글 관련 처리
         // 토글 컨트롤러 객체 생성
-        let summaryToggle = SummaryToggleController(volumText: book.volumeText)
+        let summaryToggle = SummaryToggleController(volumText: decoratedBook.volumeText)
 
         // 처리용 변수에 값 할당
         let isExpanded = summaryToggle.isExpanded
-        let fullText = book.book.summary
-        let foldedText = book.foldedSummary
+        let fullText = decoratedBook.book.summary
+        let foldedText = decoratedBook.foldedSummary
 
         // SummaryViewModel 객체 생성
         let summaryViewModel: SummaryViewModel
@@ -156,8 +156,8 @@ class BookListViewController: UIViewController {
             )
         }
         
-        descriptionStackView.setup(book, summaryViewModel: summaryViewModel)
-        chapterStackView.setup(book)
+        descriptionStackView.setup(decoratedBook, summaryViewModel: summaryViewModel)
+        chapterStackView.setup(decoratedBook)
         
     }
 }

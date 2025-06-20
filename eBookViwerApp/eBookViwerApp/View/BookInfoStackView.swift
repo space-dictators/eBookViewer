@@ -19,59 +19,32 @@ final class BookInfoStackView: UIStackView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-    }
-
-    required init(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-
-    func setup(_ decoratedBook: DecoratedBook) {
-        // 동적 구성시 상위 스택 뷰 중복 제거 코드
-        arrangedSubviews.forEach { $0.removeFromSuperview() }
-
+        
         axis = .horizontal // 왼쪽 -> 오른쪽 구성
         spacing = 8 // 스택 뷰 내 요소들 사이의 간격
         alignment = .top // 내부 요소들의 정렬 기준선 : 위쪽
         distribution = .fill // 각 요소의 고유 크기 유지
-
+        
+        // TODO: 현재 동작상 문제는 없지만 빠진 요소의 문제
+        
         // 책 이미지 설정
-        bookImage.image = UIImage(named: decoratedBook.imageName)
         bookImage.contentMode = .scaleAspectFit // 비율 유지 + 전체 보이게
         bookImage.snp.makeConstraints {
             $0.width.equalTo(100)
-            $0.height.equalTo(150)
+            $0.height.equalTo(bookImage.snp.width).multipliedBy(1.5)
         }
-
+        
         // 텍스트용 세로 스택 뷰 설정
         textStackView.axis = .vertical // 위 -> 아래 구성
         textStackView.spacing = 8
         textStackView.alignment = .leading
         textStackView.distribution = .fill
-
-        // 책 정보란의 제목라벨 설정
-        titleLabel.text = decoratedBook.book.title
+        
+        // 정보란의 제목 라벨 설정
         titleLabel.font = .boldSystemFont(ofSize: 20)
         titleLabel.textColor = .black
         titleLabel.numberOfLines = 0
-
-        // 작가 라벨 설정
-        authorLabel.attributedText = AttributedStringBuilder.infoAuthorStyledText(
-            mainText: "Author",
-            subText: decoratedBook.book.author
-        )
-
-        // 출판일 라벨 설정
-        releaseDateLabel.attributedText = AttributedStringBuilder.infoStyledText(
-            mainText: "Release",
-            subText: decoratedBook.dateFormat(decoratedBook.book.releaseDate)
-        )
-
-        // 페이지수 라벨 설정
-        pageCountLabel.attributedText = AttributedStringBuilder.infoStyledText(
-            mainText: "Pages",
-            subText: String(decoratedBook.book.pages)
-        )
-
+        
         // 텍스트용 스택뷰에 라벨들 추가
         let labeList = [titleLabel, authorLabel, releaseDateLabel, pageCountLabel]
 
@@ -85,5 +58,39 @@ final class BookInfoStackView: UIStackView {
         for item in stackViewList {
             addArrangedSubview(item)
         }
+        
+    }
+
+    func updateBookInfo(_ decoratedBook: DecoratedBook) {
+
+        // 책 이미지 업데이트
+        bookImage.image = UIImage(named: decoratedBook.imageName)
+
+        // 책 정보란의 제목 업데이트
+        titleLabel.text = decoratedBook.book.title
+
+        // 작가 라벨 업데이트
+        authorLabel.attributedText = AttributedStringBuilder.infoAuthorStyledText(
+            mainText: "Author",
+            subText: decoratedBook.book.author
+        )
+
+        // 출판일 라벨 업데이트
+        releaseDateLabel.attributedText = AttributedStringBuilder.infoStyledText(
+            mainText: "Release",
+            subText: decoratedBook.dateFormat(decoratedBook.book.releaseDate)
+        )
+
+        // 페이지수 라벨 업데이트
+        pageCountLabel.attributedText = AttributedStringBuilder.infoStyledText(
+            mainText: "Pages",
+            subText: String(decoratedBook.book.pages)
+        )
+
+    }
+    
+    @available(*, unavailable)
+    required init(coder: NSCoder) {
+        super.init(coder: coder)
     }
 }
