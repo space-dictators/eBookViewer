@@ -157,7 +157,7 @@ class BookListViewController: UIViewController {
         }
         
         descriptionStackView.setup(decoratedBook, summaryViewModel: summaryViewModel)
-        chapterStackView.setup(decoratedBook)
+        chapterStackView.updateChapter(decoratedBook)
         
     }
 }

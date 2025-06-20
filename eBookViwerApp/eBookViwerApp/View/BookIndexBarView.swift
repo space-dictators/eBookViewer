@@ -43,7 +43,7 @@ final class BookIndexBarView: UIView {
     func setup(volumeCount: Int, initialVolume: Int){
         
         // TODO: 질문
-        // 기존에 버튼이 있을 경우 삭제 구문
+        // 기존에 버튼이 있을 경우 삭제 구문 - Chapter와 엮어서
         buttons.forEach { $0.removeFromSuperview() }
         buttons.removeAll()
         
