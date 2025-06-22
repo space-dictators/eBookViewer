@@ -20,7 +20,14 @@ final class SummaryToggleController {
     func toggle() {
         // 토글 후 상태 저장
         isExpanded.toggle()
-        print("isExpanded: \(isExpanded), key: \(key)")
         UserDefaults.standard.set(isExpanded, forKey: key)
+    }
+    
+    func createSummaryToggleStatus(decoratedBook: DecoratedBook) -> SummaryToggleStatus {
+        let toggleStatus = SummaryToggleStatus(
+            text: isExpanded ? decoratedBook.book.summary : decoratedBook.foldedSummary,
+            toggleButtonTitle: isExpanded ? "접기" : "더보기",
+        )
+        return toggleStatus
     }
 }
