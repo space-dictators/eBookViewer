@@ -25,7 +25,7 @@ final class BookInfoStackView: UIStackView {
         alignment = .top // 내부 요소들의 정렬 기준선 : 위쪽
         distribution = .fill // 각 요소의 고유 크기 유지
         
-        // TODO: 현재 동작상 문제는 없지만 빠진 요소의 문제
+        // TODO: 최초실행시에 부족한 요소가 있어도 되는지(여기서는 동적으로 바뀌는 것들)
         
         // 책 이미지 설정
         bookImage.contentMode = .scaleAspectFit // 비율 유지 + 전체 보이게

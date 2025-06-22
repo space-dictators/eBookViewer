@@ -19,11 +19,7 @@ final class DescriptionStackView: UIStackView {
 
     private let toggleButton = UIButton(type: .system)
     private let buttonContainerView = UIView()
-
-    private var isExpanded = false
-    private var fullText = ""
-    private var foldedText = ""
-    
+   
     var didToggle: (() -> Void)?
 
     override init(frame: CGRect) {
@@ -94,43 +90,37 @@ final class DescriptionStackView: UIStackView {
             $0.trailing.equalToSuperview()
             $0.top.bottom.equalToSuperview()
         }
-               
-
-    }
-
-    func updateDescriptonStackView(_ decoratedBook: DecoratedBook, SummaryToggleStatus: SummaryToggleStatus) {
-        // 동적 구성시 상위 스택 뷰 중복 제거 코드
-        arrangedSubviews.forEach { $0.removeFromSuperview() }
-
-        // dedication 내용 업데이트
-        dedicationTextLabel.text = decoratedBook.book.dedication
         
-        // summary 내용 업데이트
-        summaryTextLabel.text = SummaryToggleStatus.text
-        
-        // 토글 버튼 처리
-        // 버튼 숨김 관련 설정
-        toggleButton.isHidden = SummaryToggleStatus.toggleButtonTitle == nil
-
-        // 옵셔널 바인딩 해제 후 버튼에 제목 부여
-        if let title = SummaryToggleStatus.toggleButtonTitle {
-            toggleButton.setTitle(title, for: .normal)
-        }
-        
-        // TODO: 왜 얘는 올리면 안되지?
-        // DescriptionStackView에 각각의 스택뷰 추가
         let descriptionList = [dedicationStackView, summaryStackView]
 
         for item in descriptionList {
             addArrangedSubview(item)
         }
-
+        
     }
-    //TODO: 중복 해결
+
+    func updateDescriptonStackView(_ decoratedBook: DecoratedBook, summaryToggleStatus: SummaryToggleStatus) {
+        // 동적 구성시 상위 스택 뷰 중복 제거 코드
+//        arrangedSubviews.forEach { $0.removeFromSuperview() }
+
+        // dedication 내용 업데이트
+        dedicationTextLabel.text = decoratedBook.book.dedication
+        
+        // summary, 버튼 내용 업데이트
+        updateSummary(status: summaryToggleStatus)
+        
+    }
+
     // summaryTextLabel과 toggleButton를 업데이트
-    func updateSummary(text: String, buttonTitle: String) {
-        summaryTextLabel.text = text
-        toggleButton.setTitle(buttonTitle, for: .normal)
+    func updateSummary(status: SummaryToggleStatus) {
+        // summary 내용 업데이트
+        summaryTextLabel.text = status.text
+        // 토글 버튼 숨김처리
+        toggleButton.isHidden = status.isHidden
+        // 옵셔널 바인딩 후 버튼이 존재하면 더보기/접기 이름 표시
+        if let title = status.toggleButtonTitle {
+            toggleButton.setTitle(title, for: .normal)
+        }
     }
     
     @available(*, unavailable)

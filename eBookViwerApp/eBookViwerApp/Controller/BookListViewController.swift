@@ -9,7 +9,7 @@ import SnapKit
 import UIKit
 
 class BookListViewController: UIViewController {
-   
+    
     private let dataService = DataService()
     private var decoratedBooks: [DecoratedBook] = []
     
@@ -20,15 +20,15 @@ class BookListViewController: UIViewController {
     let descriptionStackView = DescriptionStackView()
     let chapterStackView = ChapterStackView()
     
-
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
-
+        
         do {
-            let bookData = try dataService.loadBooks()
-            configureUI(bookData)
-                
+            let books = try dataService.loadBooks()
+            configureUI(books)
+            
         } catch {
             print(error)
             // 메인 쓰레드 다음 런루프 싸이클에 작업할당
@@ -38,9 +38,9 @@ class BookListViewController: UIViewController {
             }
         }
     }
-
+    
     private func configureUI(_ books: [Book]) {
-
+        
         // UI에 사용하기 위해 데이터 추가 가공
         decoratedBooks = books.enumerated().map { index, book in
             DecoratedBook(book: book, index: index)
@@ -65,25 +65,25 @@ class BookListViewController: UIViewController {
             // 뷰 바꾸는 함수 실행
             updateBookListView(for: selectedVolume)
         }
-
+        
         view.addSubview(titleLabel)
         view.addSubview(indexBar)
         view.addSubview(scrollContainer)
-
-
+        
+        
         // 스크롤 뷰에 위 세개 스택뷰 추가
         let scrollviewList = [bookInfoStackView, descriptionStackView, chapterStackView]
         for item in scrollviewList {
             scrollContainer.contentStackView.addArrangedSubview(item)
         }
-
+        
         // 오토 레이아웃 정의
         titleLabel.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
             $0.leading.trailing.equalToSuperview().inset(20)
         }
-
-      
+        
+        
         indexBar.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(16)
             $0.leading.greaterThanOrEqualToSuperview().offset(20)
@@ -91,7 +91,7 @@ class BookListViewController: UIViewController {
             $0.centerX.equalToSuperview()
             $0.height.equalTo(40)
         }
-
+        
         scrollContainer.snp.makeConstraints {
             $0.top.equalTo(indexBar.snp.bottom).offset(16)
             $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
@@ -117,44 +117,30 @@ class BookListViewController: UIViewController {
         
         // 토글 관련 처리
         // 토글 컨트롤러 객체 생성
-        let summaryToggle = SummaryToggleController(volumText: decoratedBook.volumeText)
-
-        // 처리용 변수에 값 할당
-        let isExpanded = summaryToggle.isExpanded
-        let fullText = decoratedBook.book.summary
-        let foldedText = decoratedBook.foldedSummary
+        let summaryToggle = SummaryToggleController(volumeText: decoratedBook.volumeText)
 
         // SummaryToggleStatus 객체 생성
-        let toggleStatus: SummaryToggleStatus
+        let toggleStatus = summaryToggle.createSummaryToggleStatus(decoratedBook)
+        
+        /*
+         TODO: 작동 방식에 대해서
+         1. 실행시 클로저 이하의 구문 실행여부
+         2. 클로저 위에서 선언된 객체 사용
+         3. if else 안에 있을때
+         */
 
-        // 450자 이하인 경우 전체 텍스트만 보이고 버튼 필요없음 -> nil로 두기
-        if fullText.count < 450 {
-            toggleStatus = SummaryToggleStatus(
-                text: fullText,
-                toggleButtonTitle: nil,
-            )
-        } else {
-            descriptionStackView.didToggle = { [weak self] in
-                guard let self else { return }
-                summaryToggle.toggle()
-
-                // 토글에 따라 변수에 바뀌는 값 할당
-                let newIsExpanded = summaryToggle.isExpanded
-                let newText = newIsExpanded ? fullText : foldedText
-                let newTitle = newIsExpanded ? "접기" : "더보기"
-                
-                // 바뀐 값 적용하는 함수 실행
-                self.descriptionStackView.updateSummary(text: newText, buttonTitle: newTitle)
-            }
-
-            // 최초 실행시의 값을 토글 값 모델에 설정
-            toggleStatus = SummaryToggleStatus(
-                text: isExpanded ? fullText : foldedText,
-                toggleButtonTitle: isExpanded ? "접기" : "더보기",
-            )
+        // 토글 버튼 클로저
+        descriptionStackView.didToggle = { [weak self] in
+            guard let self else { return }
+            summaryToggle.toggle()
+            
+            let status = summaryToggle.createSummaryToggleStatus(decoratedBook)
+            
+            // 바뀐 값 적용하는 함수 실행
+            self.descriptionStackView.updateSummary(status: status)
         }
         
-        descriptionStackView.updateDescriptonStackView(decoratedBook, SummaryToggleStatus: toggleStatus)
+        descriptionStackView.updateDescriptonStackView(decoratedBook, summaryToggleStatus: toggleStatus)
         
         chapterStackView.updateChapter(decoratedBook)
         

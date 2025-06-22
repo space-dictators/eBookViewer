@@ -12,7 +12,6 @@ struct DecoratedBook {
     let volumeText: String // "1", "2", ... (권수 정보)
     let imageName: String // "harrypotter1", "harrypotter2", ...
     let chapterArray: [String]
-    var isExpanded: Bool
     let foldedSummary: String
 
     init(book: Book, index: Int) {
@@ -24,8 +23,8 @@ struct DecoratedBook {
         volumeText = "\(index + 1)"
         imageName = "harrypotter\(index + 1)"
         chapterArray = book.chapters.map { "\($0.title)" }
-        isExpanded = false
         foldedSummary = book.summary.prefix(450) + "..."
+        
     }
 
     // JSON의 날짜 포맷을 MMMM d, yyyy로 변환
