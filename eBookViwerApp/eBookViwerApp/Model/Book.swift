@@ -7,6 +7,7 @@
 
 import Foundation
 
+// TODO: Date타입으로 파싱해보기
 // JSON 파싱용 객체
 struct Book: Codable {
     let title: String

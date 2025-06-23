@@ -11,6 +11,13 @@ import UIKit
 final class BookIndexButton: UIButton {
     private(set) var index: Int = 0
     
+    /*
+     TODO: isSelected 프로토콜 활용
+     위 프로토콜과
+     setTitleColor( for: .selected)
+     을 사용해서 수정하면 함수를 사용하지 않아도 된다.
+    */
+    
     // 최초 설정
     override init(frame: CGRect) {
         super.init(frame: frame)

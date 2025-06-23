@@ -7,9 +7,11 @@
 
 import Foundation
 
-// 이건 모델이다.
-// 컨트롤러는 1개의 화면을 담당
-// 데이터의 형태는 모델
+/*
+ TODO: 구조 수정
+ 컨트롤러는 1개의 화면을 담당
+ 데이터의 형태는 모델
+ */
 final class SummaryToggleController {
     
     private let key: String

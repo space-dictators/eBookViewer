@@ -22,7 +22,7 @@ struct BookData {
         //UI용 가공 데이터
         volumeText = "\(index + 1)"
         imageName = "harrypotter\(index + 1)"
-        chapterArray = book.chapters.map { "\($0.title)" }
+        chapterArray = book.chapters.map { "\($0.title)" } // 중복코드
         foldedSummary = book.summary.prefix(450) + "..."
         
     }
