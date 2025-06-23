@@ -10,7 +10,8 @@ import UIKit
 
 final class ChapterStackView: UIStackView {
     private let chapterTitleLabel = UILabel()
-
+    private var chatperLabels: [UILabel] = []
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -24,25 +25,37 @@ final class ChapterStackView: UIStackView {
         chapterTitleLabel.textColor = .black
         
         addArrangedSubview(chapterTitleLabel)
+        
     }
 
     func updateChapter(_ bookData: BookData) {
         
-        // TODO: 좋은 방법이 아니다.(메모리에 무리)
-        // 1. 멀티라인 라벨로 만든다. 간격 attributeString으로 조절
-        // 2. 최대 갯수만큼 만들고 hidden활용
+        let subviewCount = self.arrangedSubviews.count - 1
+        let chapterCount = bookData.book.chapters.count
         
-        // 동적 구성시 상위 스택 뷰 중복 제거 코드
-        arrangedSubviews.forEach { $0.removeFromSuperview() }
-        
-        for item in bookData.book.chapters {
-            let chapterLabel = UILabel()
-            chapterLabel.text = item.title
-            chapterLabel.font = .systemFont(ofSize: 14)
-            chapterLabel.textColor = .darkGray
-            chapterLabel.numberOfLines = 0
-            addArrangedSubview(chapterLabel)
+        if subviewCount < chapterCount {
+            let addCount = chapterCount - subviewCount
+            for _ in 0 ..< addCount {
+                let chapterLabel = UILabel()
+                chapterLabel.font = .systemFont(ofSize: 14)
+                chapterLabel.textColor = .darkGray
+                chapterLabel.numberOfLines = 0
+                chapterLabel.isHidden = true
+                chatperLabels.append(chapterLabel)
+                addArrangedSubview(chapterLabel)
+            }
         }
+        
+        for (index, label) in chatperLabels.enumerated(){
+            if index < chapterCount {
+                label.text = bookData.book.chapters[index].title
+                label.isHidden = false
+            } else {
+                label.text = nil
+                label.isHidden = true
+            }
+        }
+
     }
     
     @available(*, unavailable)
