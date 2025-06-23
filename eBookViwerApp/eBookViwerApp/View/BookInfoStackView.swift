@@ -13,9 +13,18 @@ final class BookInfoStackView: UIStackView {
     private let textStackView = UIStackView()
 
     private let titleLabel = UILabel()
-    private let authorLabel = UILabel()
+    
+    private let authorStackview = UIStackView()
+    private let authorSectionLabel = UILabel()
+    private let authorNameLabel = UILabel()
+    
+    private let releaseDateStackView = UIStackView()
+    private let releaseDateSectionLabel = UILabel()
     private let releaseDateLabel = UILabel()
-    private let pageCountLabel = UILabel()
+    
+    private let pagesStackView = UIStackView()
+    private let pagesSection = UILabel()
+    private let pagesLabel = UILabel()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -44,10 +53,57 @@ final class BookInfoStackView: UIStackView {
         titleLabel.textColor = .black
         titleLabel.numberOfLines = 0
         
-        // 텍스트용 스택뷰에 라벨들 추가
-        let labeList = [titleLabel, authorLabel, releaseDateLabel, pageCountLabel]
+        // 작가 정보란 라벨 설정
+        authorSectionLabel.text = "Author"
+        authorSectionLabel.textColor = .black
+        authorSectionLabel.font = .boldSystemFont(ofSize: 16)
+        
+        authorNameLabel.font = .systemFont(ofSize: 18)
+        authorNameLabel.textColor = .darkGray
+        
+        authorStackview.axis = .horizontal
+        authorStackview.spacing = 8
+        authorStackview.alignment = .center
+        authorStackview.distribution = .fill
+        authorStackview.addArrangedSubview(authorSectionLabel)
+        authorStackview.addArrangedSubview(authorNameLabel)
+        
+        // 발매일 정보란 라벨 설정
+        
+        releaseDateSectionLabel.text = "Released"
+        releaseDateSectionLabel.font = .boldSystemFont(ofSize: 14)
+        releaseDateSectionLabel.textColor = .black
+        
+        releaseDateLabel.font = .systemFont(ofSize: 14)
+        releaseDateLabel.textColor = .gray
+        
+        releaseDateStackView.axis = .horizontal
+        releaseDateStackView.spacing = 8
+        releaseDateStackView.alignment = .leading
+        releaseDateStackView.distribution = .fill
+        releaseDateStackView.addArrangedSubview(releaseDateSectionLabel)
+        releaseDateStackView.addArrangedSubview(releaseDateLabel)
+        
+        // 페이지 수란 라벨 설정
+        pagesSection.text = "Pages"
+        pagesSection.font = .boldSystemFont(ofSize: 14)
+        pagesSection.textColor = .black
+        
+        pagesLabel.font = .systemFont(ofSize: 14)
+        pagesLabel.textColor = .gray
+        
+        pagesStackView.axis = .horizontal
+        pagesStackView.spacing = 8
+        pagesStackView.alignment = .leading
+        pagesStackView.distribution = .fill
+        
+        pagesStackView.addArrangedSubview(pagesSection)
+        pagesStackView.addArrangedSubview(pagesLabel)
+        
+        // 텍스트용 스택뷰에 라벨과 하위 스택뷰 추가
+        let itemList = [titleLabel, authorStackview, releaseDateStackView, pagesStackView]
 
-        for item in labeList {
+        for item in itemList {
             textStackView.addArrangedSubview(item)
         }
 
@@ -67,24 +123,15 @@ final class BookInfoStackView: UIStackView {
 
         // 책 정보란의 제목 업데이트
         titleLabel.text = bookData.book.title
-
-        // 작가 라벨 업데이트
-        authorLabel.attributedText = AttributedStringBuilder.infoAuthorStyledText(
-            mainText: "Author",
-            subText: bookData.book.author
-        )
-
-        // 출판일 라벨 업데이트
-        releaseDateLabel.attributedText = AttributedStringBuilder.infoStyledText(
-            mainText: "Release",
-            subText: bookData.dateFormat(bookData.book.releaseDate)
-        )
-
-        // 페이지수 라벨 업데이트
-        pageCountLabel.attributedText = AttributedStringBuilder.infoStyledText(
-            mainText: "Pages",
-            subText: String(bookData.book.pages)
-        )
+        
+        // 작가란 업데이트
+        authorNameLabel.text = bookData.book.author
+        
+        // 발매일 업데이트
+        releaseDateLabel.text = bookData.book.releaseDate
+        
+        // 페이지 수 업데이트
+        pagesLabel.text = String(bookData.book.pages)
 
     }
     

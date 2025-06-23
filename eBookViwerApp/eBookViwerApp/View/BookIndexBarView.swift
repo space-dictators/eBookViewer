@@ -41,13 +41,7 @@ final class BookIndexBarView: UIView {
     
     // 시리즈 권수와 현재 선택 시리즈 번호를 받아서 최초 버튼 생성
     func setup(volumeCount: Int, initialVolume: Int){
-        
-        // TODO: 질문
-        // 기존에 버튼이 있을 경우 삭제 구문 - Chapter와 엮어서
-        // 스크롤뷰와 테이블뷰 강의로 보충
-//        buttons.forEach { $0.removeFromSuperview() }
-//        buttons.removeAll()
-        
+               
         // 시리즈 숫자만큼 버튼 생성
         for index in 1...volumeCount {
             let button = BookIndexButton()
