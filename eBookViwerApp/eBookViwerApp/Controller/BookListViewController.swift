@@ -45,6 +45,7 @@ class BookListViewController: UIViewController {
         bookDatas = books.enumerated().map { index, book in
             BookData(book: book, index: index)
         }
+        
         // 배경색
         view.backgroundColor = .white
         
@@ -117,20 +118,17 @@ class BookListViewController: UIViewController {
         bookInfoStackView.updateBookInfo(bookData)
         
         // 토글 관련 처리
-        // 토글 컨트롤러 객체 생성
-        let summaryToggle = SummaryToggleController(volumeText: bookData.volumeText)
-
-        // SummaryToggleStatus 객체 생성
-        let toggleStatus = summaryToggle.createSummaryToggleStatus(bookData)
+       
         
-    
+        let toggleStatus = bookData.getSummaryToggleStatus()
 
         // 토글 버튼 클로저
         descriptionStackView.didToggle = { [weak self] in
             guard let self else { return }
-            summaryToggle.toggle()
+
+            bookData.toggle()
             
-            let status = summaryToggle.createSummaryToggleStatus(bookData)
+            let status = bookData.getSummaryToggleStatus()
             
             // 바뀐 값 적용하는 함수 실행
             self.descriptionStackView.updateSummary(status: status)
