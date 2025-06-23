@@ -17,24 +17,22 @@ class BookData {
     var summaryToggleStatus: SummaryToggleStatus?
 
     init(book: Book, index: Int) {
-       
         // 원본 JOSN 파싱은 book에 저장
         self.book = book
-        
-        //UI용 가공 데이터
+
+        // UI용 가공 데이터
         volumeText = "\(index + 1)"
         imageName = "harrypotter\(index + 1)"
         foldedSummary = book.summary.prefix(450) + "..."
         key = "summary_expanded_\(volumeText)"
         isExpanded = UserDefaults.standard.bool(forKey: key)
-        
     }
-    
+
     func getSummaryToggleStatus() -> SummaryToggleStatus {
         let toggleStatus: SummaryToggleStatus
         let fullText = book.summary
         let foldedText = foldedSummary
-        
+
         if book.summary.count < 450 {
             toggleStatus = SummaryToggleStatus(
                 text: fullText,
@@ -48,10 +46,10 @@ class BookData {
         }
         return toggleStatus
     }
-    
+
     func toggle() {
         // 토글 후 상태 저장
-        self.isExpanded.toggle()
+        isExpanded.toggle()
         UserDefaults.standard.set(isExpanded, forKey: key)
     }
 

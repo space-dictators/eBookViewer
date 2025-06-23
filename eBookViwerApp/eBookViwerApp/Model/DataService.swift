@@ -31,7 +31,7 @@ class DataService {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd"
             decoder.dateDecodingStrategy = .formatted(formatter)
-            
+
             let data = try Data(contentsOf: URL(fileURLWithPath: path))
             let bookResponse = try decoder.decode(BookResponse.self, from: data)
             let books = bookResponse.data.map { $0.attributes }

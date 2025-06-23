@@ -11,7 +11,6 @@ import UIKit
 // 굳이 나눌 필요가 없다.
 enum AlertFactory {
     static func alert(for error: Error) -> UIAlertController {
-        
         let message = error.localizedDescription
 
         let alert = UIAlertController(title: "에러", message: message, preferredStyle: .alert)
