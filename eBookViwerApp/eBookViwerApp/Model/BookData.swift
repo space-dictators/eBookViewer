@@ -11,13 +11,13 @@ class BookData {
     let book: Book // 원본 Book 데이터
     let volumeText: String // "1", "2", ... (권수 정보)
     let imageName: String // "harrypotter1", "harrypotter2", ...
-    let foldedSummary: String
-    let key: String
-    var isExpanded: Bool
-    var summaryToggleStatus: SummaryToggleStatus?
+    let foldedSummary: String // 접힌 Summary에서 보여줄 450자 데이터
+    let key: String // 각권의 접힘상태를 불러올 키
+    var isExpanded: Bool // 접힌 상태
+    var status: SummaryToggleStatus // 뷰에 출력할 내용을 담은 객체
 
     init(book: Book, index: Int) {
-        // 원본 JOSN 파싱은 book에 저장
+        // 원본 JOSN 파싱은 book에 저장해서 그대로 사용
         self.book = book
 
         // UI용 가공 데이터
@@ -26,31 +26,35 @@ class BookData {
         foldedSummary = book.summary.prefix(450) + "..."
         key = "summary_expanded_\(volumeText)"
         isExpanded = UserDefaults.standard.bool(forKey: key)
+        status = SummaryToggleStatus(text: "", toggleButtonTitle: nil)
+
+        updateToggleStatus()
     }
 
-    func getSummaryToggleStatus() -> SummaryToggleStatus {
-        let toggleStatus: SummaryToggleStatus
+    //
+    func updateToggleStatus() {
         let fullText = book.summary
         let foldedText = foldedSummary
 
+        // 450자 이하면 토글 버튼 이름에 전체텍스트, 버튼이름:nil, 이상이면 현재 접힌상태에 맞추어
         if book.summary.count < 450 {
-            toggleStatus = SummaryToggleStatus(
-                text: fullText,
-                toggleButtonTitle: nil,
-            )
+            status.text = fullText
+            status.toggleButtonTitle = nil
         } else {
-            toggleStatus = SummaryToggleStatus(
-                text: isExpanded ? fullText : foldedText,
-                toggleButtonTitle: isExpanded ? "접기" : "더보기",
-            )
+            status.text = isExpanded ? fullText : foldedText
+            status.toggleButtonTitle = isExpanded ? "접기" : "더보기"
         }
-        return toggleStatus
+    }
+
+    func getSummaryToggleStatus() -> SummaryToggleStatus {
+        return status
     }
 
     func toggle() {
-        // 토글 후 상태 저장
+        // 토글 후 상태 저장 및 업데이트
         isExpanded.toggle()
         UserDefaults.standard.set(isExpanded, forKey: key)
+        updateToggleStatus()
     }
 
     // 날짜 포맷을 MMMM d, yyyy로 변환
