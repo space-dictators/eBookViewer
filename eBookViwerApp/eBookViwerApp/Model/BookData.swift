@@ -11,7 +11,6 @@ struct BookData {
     let book: Book // 원본 Book 데이터
     let volumeText: String // "1", "2", ... (권수 정보)
     let imageName: String // "harrypotter1", "harrypotter2", ...
-    let chapterArray: [String]
     let foldedSummary: String
 
     init(book: Book, index: Int) {
@@ -22,7 +21,6 @@ struct BookData {
         //UI용 가공 데이터
         volumeText = "\(index + 1)"
         imageName = "harrypotter\(index + 1)"
-        chapterArray = book.chapters.map { "\($0.title)" } // 중복코드
         foldedSummary = book.summary.prefix(450) + "..."
         
     }

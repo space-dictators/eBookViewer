@@ -35,10 +35,9 @@ final class ChapterStackView: UIStackView {
         // 동적 구성시 상위 스택 뷰 중복 제거 코드
         arrangedSubviews.forEach { $0.removeFromSuperview() }
         
-
-        for item in bookData.chapterArray {
+        for item in bookData.book.chapters {
             let chapterLabel = UILabel()
-            chapterLabel.text = item
+            chapterLabel.text = item.title
             chapterLabel.font = .systemFont(ofSize: 14)
             chapterLabel.textColor = .darkGray
             chapterLabel.numberOfLines = 0
