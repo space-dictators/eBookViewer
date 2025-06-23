@@ -25,7 +25,6 @@ class BookData {
         volumeText = "\(index + 1)"
         imageName = "harrypotter\(index + 1)"
         foldedSummary = book.summary.prefix(450) + "..."
-        
         key = "summary_expanded_\(volumeText)"
         isExpanded = UserDefaults.standard.bool(forKey: key)
         
@@ -55,22 +54,12 @@ class BookData {
         self.isExpanded.toggle()
         UserDefaults.standard.set(isExpanded, forKey: key)
     }
-    
-    
-    
 
-
-    // JSON의 날짜 포맷을 MMMM d, yyyy로 변환
-    func dateFormat(_ dateString: String) -> String {
-        let inputDateFormatter = DateFormatter()
-        inputDateFormatter.dateFormat = "yyyy-MM-dd"
-
-        let outputDateFormatter = DateFormatter()
-        outputDateFormatter.dateFormat = "MMMM d, yyyy"
-
-        if let date = inputDateFormatter.date(from: dateString) {
-            return outputDateFormatter.string(from: date)
-        }
-        return dateString
+    // 날짜 포맷을 MMMM d, yyyy로 변환
+    func dateFormat(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM d, yyyy"
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        return formatter.string(from: date)
     }
 }

@@ -48,8 +48,8 @@ final class BookIndexBarView: UIView {
             // 각권 번호 입력
             button.configure(with: index)
             
-            // 선택 여부 체크
-            button.updateSelection(isSelected: index == initialVolume)
+            // 최초 선택된 버튼에 isSelected = true
+            button.isSelected = (index == initialVolume)
             
             // 버튼 크기 레이아웃
             button.snp.makeConstraints {
@@ -70,11 +70,11 @@ final class BookIndexBarView: UIView {
         }
     }
     
+    // TODO: 색처리과정
     // 번호 선택에 따라 색 변경
     func updateSelectedIndex(to selectedIndex: Int) {
         for button in buttons {
-            let isSelected = (button.index == selectedIndex)
-            button.updateSelection(isSelected: isSelected)
+            button.isSelected = (button.index == selectedIndex)
         }
     }
     

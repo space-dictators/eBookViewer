@@ -128,7 +128,7 @@ final class BookInfoStackView: UIStackView {
         authorNameLabel.text = bookData.book.author
         
         // 발매일 업데이트
-        releaseDateLabel.text = bookData.book.releaseDate
+        releaseDateLabel.text = bookData.dateFormat(bookData.book.releaseDate)
         
         // 페이지 수 업데이트
         pagesLabel.text = String(bookData.book.pages)

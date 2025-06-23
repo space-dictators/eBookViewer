@@ -11,32 +11,31 @@ import UIKit
 final class BookIndexButton: UIButton {
     private(set) var index: Int = 0
     
-    /*
-     TODO: isSelected 프로토콜 활용
-     위 프로토콜과
-     setTitleColor( for: .selected)
-     을 사용해서 수정하면 함수를 사용하지 않아도 된다.
-    */
-    
     // 최초 설정
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        // 기본 상태 설정
         titleLabel?.font = .systemFont(ofSize: 16)
         clipsToBounds = true
+        
+       
+        setTitleColor(.systemBlue, for: .normal)
+        setTitleColor(.white, for: .selected)
     }
-
+    
+    // 선택 시 백그라운드 색 설정
+    override var isSelected: Bool {
+        didSet {
+            backgroundColor = isSelected ? .systemBlue : .systemGray5
+        }
+    }
+    
     // 버튼의 인덱스 번호와 버튼에 표시될 숫자문자 설정
     func configure(with index: Int){
         self.index = index
-        setTitle(String(index), for: .normal)
-    }
+        setTitle(String(index), for: .normal)    }
     
-    // 선택여부에 따라 색 설정변경
-    func updateSelection(isSelected: Bool){
-        backgroundColor = isSelected ? .systemBlue : .systemGray5
-        setTitleColor(isSelected ? .white : .systemBlue, for: .normal)
-    }
-
     // 버튼이 레이아웃되는 시점 layoutSubviews 호출(콜백처럼)
     override func layoutSubviews() {
         // super 선언해야함
