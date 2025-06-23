@@ -23,6 +23,7 @@ class BookListViewController: UIViewController {
         super.viewDidLoad()
 
         do {
+            // 최초 실행시 JSON파싱 후 데이터 전달
             let books = try dataService.loadBooks()
             configureUI(books)
 
@@ -36,6 +37,7 @@ class BookListViewController: UIViewController {
         }
     }
 
+    // 최초 UI 생성
     private func configureUI(_ books: [Book]) {
         // UI에 사용하기 위해 데이터 추가 가공
         bookDatas = books.enumerated().map { index, book in
@@ -54,21 +56,23 @@ class BookListViewController: UIViewController {
         // 인덱스바 셋업
         indexBar.setup(volumeCount: bookDatas.count, initialVolume: initialVolume)
 
+        // 시리즈 권수 버튼을 선택했을 때 사용하는 클로저
         indexBar.didSelectVolume = { [weak self] selectedVolume in
             guard let self else { return }
             // 선택된 버튼만 파란색으로
             indexBar.updateSelectedIndex(to: selectedVolume)
             // 마지막에 열람한 권수 저장
             UserDefaults.standard.set(selectedVolume, forKey: "LastSelectedVolume")
-            // 뷰 바꾸는 함수 실행
+            // 뷰 업데이트 함수 실행
             updateBookListView(for: selectedVolume)
         }
 
+        // 루트 뷰에 제목(최상단), 버튼 영역, 스크롤뷰를 담을 컨테이너 뷰 추가
         view.addSubview(titleLabel)
         view.addSubview(indexBar)
         view.addSubview(scrollContainer)
 
-        // 스크롤 뷰에 위 세개 스택뷰 추가
+        // 스크롤 뷰에 책 정보 영역 / 설명 영역 / 챕터 영역 세개의 스택뷰 추가
         let scrollviewList = [bookInfoStackView, descriptionStackView, chapterStackView]
         for item in scrollviewList {
             scrollContainer.contentStackView.addArrangedSubview(item)
@@ -99,7 +103,7 @@ class BookListViewController: UIViewController {
 
     // 뷰 업데이트 함수
     private func updateBookListView(for volume: Int) {
-        // 객체 인덱스 첫번째는 0이기 때문에 -1 변수 생성
+        // 객체 인덱스 첫번째는 0이기 때문에 -1을 해서 변수 생성
         let index = volume - 1
         let bookData = bookDatas[index]
 
@@ -110,23 +114,27 @@ class BookListViewController: UIViewController {
         bookInfoStackView.updateBookInfo(bookData)
 
         // 토글 관련 처리
-
+        // 토글에 관한 데이터 획득
         let toggleStatus = bookData.getSummaryToggleStatus()
 
         // 토글 버튼 클로저
         descriptionStackView.didToggle = { [weak self] in
             guard let self else { return }
 
+            // 토글버튼에 설정한 토글함수 실행
             bookData.toggle()
 
+            // 뷰에 전달할 바뀐 정보 회득
             let status = bookData.getSummaryToggleStatus()
 
             // 바뀐 값 적용하는 함수 실행
             self.descriptionStackView.updateSummary(status: status)
         }
 
+        // descriptionStackView 업데이트 함수 실행
         descriptionStackView.updateDescriptonStackView(bookData, summaryToggleStatus: toggleStatus)
 
+        // chapterStackView 업데이트 함수 실행
         chapterStackView.updateChapter(bookData)
     }
 }

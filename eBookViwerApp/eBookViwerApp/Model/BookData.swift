@@ -28,15 +28,16 @@ class BookData {
         isExpanded = UserDefaults.standard.bool(forKey: key)
         status = SummaryToggleStatus(text: "", toggleButtonTitle: nil)
 
+        // 생성시 최초 출력을 위해 뷰 출력물을 업데이트
         updateToggleStatus()
     }
 
-    //
+    // 뷰에 전달할 내용을 업데이트
     func updateToggleStatus() {
         let fullText = book.summary
         let foldedText = foldedSummary
 
-        // 450자 이하면 토글 버튼 이름에 전체텍스트, 버튼이름:nil, 이상이면 현재 접힌상태에 맞추어
+        // 450자 이하면 토글 버튼 이름에 전체텍스트, 버튼이름:nil, 이상이면 현재 접힌상태에 맞추어 데이터 입력
         if book.summary.count < 450 {
             status.text = fullText
             status.toggleButtonTitle = nil
@@ -46,10 +47,12 @@ class BookData {
         }
     }
 
+    // 뷰에 전달할 내용을 리턴
     func getSummaryToggleStatus() -> SummaryToggleStatus {
         return status
     }
 
+    // 토글 버튼을 눌렀을 때 접힘 상태의 변환, 유저디폴트에 키값 저장, 뷰에 전달할 내용 업데이트
     func toggle() {
         // 토글 후 상태 저장 및 업데이트
         isExpanded.toggle()

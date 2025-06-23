@@ -17,8 +17,10 @@ final class BookIndexButton: UIButton {
 
         // 기본 상태 설정
         titleLabel?.font = .systemFont(ofSize: 16)
+        // 모서리를 둥글게 할때 외곽선을 둥글게
         clipsToBounds = true
 
+        // 기본 버튼글자 색상 설정
         setTitleColor(.systemBlue, for: .normal)
         setTitleColor(.white, for: .selected)
     }

@@ -27,6 +27,7 @@ class DataService {
         }
 
         do {
+            // 날짜를 Date포맷으로 받기 위해 추가 코딩
             let decoder = JSONDecoder()
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd"

@@ -13,7 +13,8 @@ final class BookIndexBarView: UIView {
 
     // 버튼 저장용 배열
     private var buttons: [BookIndexButton] = []
-    // 시리즈 선택시 사용할 클로저
+
+    // 각 버튼을 눌렀을 때 사용할 클로저
     var didSelectVolume: ((Int) -> Void)?
 
     // 최초 설정
@@ -46,7 +47,7 @@ final class BookIndexBarView: UIView {
             // 각권 번호 입력
             button.configure(with: index)
 
-            // 최초 선택된 버튼에 isSelected = true
+            // 최초 선택된 버튼에 isSelected = true / 그외 false 할당
             button.isSelected = (index == initialVolume)
 
             // 버튼 크기 레이아웃
@@ -67,8 +68,7 @@ final class BookIndexBarView: UIView {
         }
     }
 
-    // TODO: 색처리과정
-    // 번호 선택에 따라 색 변경
+    // 번호를 눌렀을 때 각 버튼의 isSelected 값 변경
     func updateSelectedIndex(to selectedIndex: Int) {
         for button in buttons {
             button.isSelected = (button.index == selectedIndex)

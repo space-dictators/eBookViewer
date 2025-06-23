@@ -20,6 +20,7 @@ final class DescriptionStackView: UIStackView {
     private let toggleButton = UIButton(type: .system)
     private let buttonContainerView = UIView()
 
+    // 접기/더보기 버튼을 눌렀을 때 대응하는 클로저
     var didToggle: (() -> Void)?
 
     override init(frame: CGRect) {
@@ -30,7 +31,7 @@ final class DescriptionStackView: UIStackView {
         alignment = .leading // 내부 요소들의 정렬 기준선 : 왼쪽
         distribution = .fill // 각 요소의 고유 크기 유지
 
-        // Dedicaton 설정들
+        // Dedicaton 설정
         dedicationTitleLabel.text = "Dedicaton"
         dedicationTitleLabel.font = .boldSystemFont(ofSize: 18)
         dedicationTitleLabel.textColor = .black
@@ -50,7 +51,7 @@ final class DescriptionStackView: UIStackView {
             dedicationStackView.addArrangedSubview(item)
         }
 
-        // Summary 설정들
+        // Summary 설정
         summaryTitleLabel.text = "Summary"
         summaryTitleLabel.font = .boldSystemFont(ofSize: 18)
         summaryTitleLabel.textColor = .black
@@ -69,6 +70,7 @@ final class DescriptionStackView: UIStackView {
             self?.didToggle?()
         }, for: .touchUpInside)
 
+        // 접기/더보기 버튼 설정
         toggleButton.titleLabel?.font = .systemFont(ofSize: 14)
         toggleButton.setTitleColor(.systemBlue, for: .normal)
 
@@ -79,7 +81,7 @@ final class DescriptionStackView: UIStackView {
             summaryStackView.addArrangedSubview(item)
         }
 
-        // 버튼 컨테이너 뷰에 토글 버튼 추가 (따로 오른쪽 정렬이 가능 해진다)
+        // 버튼 컨테이너 뷰에 토글 버튼 추가 (따로 오른쪽 정렬하기 위해)
         buttonContainerView.addSubview(toggleButton)
 
         // 슈퍼뷰가 존재해야하므로 스택뷰 추가 뒤에 오토레이아웃
@@ -91,6 +93,7 @@ final class DescriptionStackView: UIStackView {
             $0.top.bottom.equalToSuperview()
         }
 
+        // 전체 DescriptionStackView에 각 영역 추가
         let descriptionList = [dedicationStackView, summaryStackView]
 
         for item in descriptionList {
@@ -98,10 +101,8 @@ final class DescriptionStackView: UIStackView {
         }
     }
 
+    // DescriptionStackView 업데이트 함수
     func updateDescriptonStackView(_ bookData: BookData, summaryToggleStatus: SummaryToggleStatus) {
-        // 동적 구성시 상위 스택 뷰 중복 제거 코드
-//        arrangedSubviews.forEach { $0.removeFromSuperview() }
-
         // dedication 내용 업데이트
         dedicationTextLabel.text = bookData.book.dedication
 
@@ -109,7 +110,7 @@ final class DescriptionStackView: UIStackView {
         updateSummary(status: summaryToggleStatus)
     }
 
-    // summaryTextLabel과 toggleButton를 업데이트
+    // 접기/ 더보기 버튼을 눌렀을 때 Summary 영역 상태를 업데이트하는 함수
     func updateSummary(status: SummaryToggleStatus) {
         // summary 내용 업데이트
         summaryTextLabel.text = status.text

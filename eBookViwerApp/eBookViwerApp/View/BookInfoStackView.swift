@@ -52,7 +52,7 @@ final class BookInfoStackView: UIStackView {
         titleLabel.textColor = .black
         titleLabel.numberOfLines = 0
 
-        // 작가 정보란 라벨 설정
+        // 작가 정보란 라벨 설정 / 스택뷰 설정
         authorSectionLabel.text = "Author"
         authorSectionLabel.textColor = .black
         authorSectionLabel.font = .boldSystemFont(ofSize: 16)
@@ -62,13 +62,12 @@ final class BookInfoStackView: UIStackView {
 
         authorStackview.axis = .horizontal
         authorStackview.spacing = 8
-        authorStackview.alignment = .center
+        authorStackview.alignment = .center // 폰트가 다르므로 Y축 센터에 맞춤
         authorStackview.distribution = .fill
         authorStackview.addArrangedSubview(authorSectionLabel)
         authorStackview.addArrangedSubview(authorNameLabel)
 
-        // 발매일 정보란 라벨 설정
-
+        // 발매일 정보란 라벨 설정 / 스택뷰 설정
         releaseDateSectionLabel.text = "Released"
         releaseDateSectionLabel.font = .boldSystemFont(ofSize: 14)
         releaseDateSectionLabel.textColor = .black
@@ -83,7 +82,7 @@ final class BookInfoStackView: UIStackView {
         releaseDateStackView.addArrangedSubview(releaseDateSectionLabel)
         releaseDateStackView.addArrangedSubview(releaseDateLabel)
 
-        // 페이지 수란 라벨 설정
+        // 페이지 수란 라벨 설정 / 스택뷰 설정
         pagesSection.text = "Pages"
         pagesSection.font = .boldSystemFont(ofSize: 14)
         pagesSection.textColor = .black
