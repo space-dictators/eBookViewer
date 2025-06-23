@@ -99,12 +99,12 @@ final class DescriptionStackView: UIStackView {
         
     }
 
-    func updateDescriptonStackView(_ decoratedBook: DecoratedBook, summaryToggleStatus: SummaryToggleStatus) {
+    func updateDescriptonStackView(_ bookData: BookData, summaryToggleStatus: SummaryToggleStatus) {
         // 동적 구성시 상위 스택 뷰 중복 제거 코드
 //        arrangedSubviews.forEach { $0.removeFromSuperview() }
 
         // dedication 내용 업데이트
-        dedicationTextLabel.text = decoratedBook.book.dedication
+        dedicationTextLabel.text = bookData.book.dedication
         
         // summary, 버튼 내용 업데이트
         updateSummary(status: summaryToggleStatus)

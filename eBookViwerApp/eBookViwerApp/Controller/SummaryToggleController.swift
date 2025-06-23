@@ -7,6 +7,9 @@
 
 import Foundation
 
+// 이건 모델이다.
+// 컨트롤러는 1개의 화면을 담당
+// 데이터의 형태는 모델
 final class SummaryToggleController {
     
     private let key: String
@@ -24,22 +27,20 @@ final class SummaryToggleController {
         UserDefaults.standard.set(isExpanded, forKey: key)
     }
     
-    func createSummaryToggleStatus(_ decoratedBook: DecoratedBook) -> SummaryToggleStatus {
+    func createSummaryToggleStatus(_ bookData: BookData) -> SummaryToggleStatus {
         let toggleStatus: SummaryToggleStatus
-        let fullText = decoratedBook.book.summary
-        let foldedText = decoratedBook.foldedSummary
+        let fullText = bookData.book.summary
+        let foldedText = bookData.foldedSummary
         
-        if decoratedBook.book.summary.count < 450 {
+        if bookData.book.summary.count < 450 {
             toggleStatus = SummaryToggleStatus(
                 text: fullText,
                 toggleButtonTitle: nil,
-                isHidden: true
             )
         } else {
             toggleStatus = SummaryToggleStatus(
                 text: isExpanded ? fullText : foldedText,
                 toggleButtonTitle: isExpanded ? "접기" : "더보기",
-                isHidden: false
             )
         }
         return toggleStatus

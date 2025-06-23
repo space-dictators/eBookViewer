@@ -25,8 +25,7 @@ final class BookInfoStackView: UIStackView {
         alignment = .top // 내부 요소들의 정렬 기준선 : 위쪽
         distribution = .fill // 각 요소의 고유 크기 유지
         
-        // TODO: 최초실행시에 부족한 요소가 있어도 되는지(여기서는 동적으로 바뀌는 것들)
-        
+           
         // 책 이미지 설정
         bookImage.contentMode = .scaleAspectFit // 비율 유지 + 전체 보이게
         bookImage.snp.makeConstraints {
@@ -61,30 +60,30 @@ final class BookInfoStackView: UIStackView {
         
     }
 
-    func updateBookInfo(_ decoratedBook: DecoratedBook) {
+    func updateBookInfo(_ bookData: BookData) {
 
         // 책 이미지 업데이트
-        bookImage.image = UIImage(named: decoratedBook.imageName)
+        bookImage.image = UIImage(named: bookData.imageName)
 
         // 책 정보란의 제목 업데이트
-        titleLabel.text = decoratedBook.book.title
+        titleLabel.text = bookData.book.title
 
         // 작가 라벨 업데이트
         authorLabel.attributedText = AttributedStringBuilder.infoAuthorStyledText(
             mainText: "Author",
-            subText: decoratedBook.book.author
+            subText: bookData.book.author
         )
 
         // 출판일 라벨 업데이트
         releaseDateLabel.attributedText = AttributedStringBuilder.infoStyledText(
             mainText: "Release",
-            subText: decoratedBook.dateFormat(decoratedBook.book.releaseDate)
+            subText: bookData.dateFormat(bookData.book.releaseDate)
         )
 
         // 페이지수 라벨 업데이트
         pageCountLabel.attributedText = AttributedStringBuilder.infoStyledText(
             mainText: "Pages",
-            subText: String(decoratedBook.book.pages)
+            subText: String(bookData.book.pages)
         )
 
     }

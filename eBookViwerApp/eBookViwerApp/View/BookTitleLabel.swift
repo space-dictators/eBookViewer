@@ -20,8 +20,8 @@ final class BookTitleLabel: UILabel {
     }
 
      // 라벨(최상단) 업데이트 함수
-    func updateTitleLabel(_ decoratedBook: DecoratedBook){
-        text = decoratedBook.book.title
+    func updateTitleLabel(_ bookData: BookData){
+        text = bookData.book.title
     }
     
     // 스토리보드용 코드지만 규약상 구현해야함

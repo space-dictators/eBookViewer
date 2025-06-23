@@ -11,6 +11,14 @@ class DataService {
     enum DataError: Error {
         case fileNotFound
         case parsingFailed
+        var localizedDescription: String {
+            switch self {
+            case .fileNotFound:
+                return "파일이 없습니다."
+            case .parsingFailed:
+                return "JSON 파싱에 실패했습니다."
+            }
+        }
     }
 
     func loadBooks() throws -> [Book] {

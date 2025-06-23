@@ -9,5 +9,7 @@
 struct SummaryToggleStatus {
     let text: String // 출력할 텍스트를 받음
     let toggleButtonTitle: String? // 접기 / 더보기
-    let isHidden: Bool // 숨길지 여부
+    var isHidden: Bool {
+        toggleButtonTitle == nil
+    } // 숨길지 여부
 }

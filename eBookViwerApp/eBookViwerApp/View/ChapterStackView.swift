@@ -26,13 +26,17 @@ final class ChapterStackView: UIStackView {
         addArrangedSubview(chapterTitleLabel)
     }
 
-    func updateChapter(_ decoratedBook: DecoratedBook) {
+    func updateChapter(_ bookData: BookData) {
         
-        // TODO: 여기선 이게 맞는지?
+        // TODO:
         // 동적 구성시 상위 스택 뷰 중복 제거 코드
+        // 멀티라인 간격 attributeString으로 조절
         arrangedSubviews.forEach { $0.removeFromSuperview() }
         
-        for item in decoratedBook.chapterArray {
+        // 좋은 방법이 아니다. 수정
+        // 1. 하나의 멀티라인 텍스트 (attributeString)
+        // 2. 최대갯수만큼 만들고 나머진 hidden
+        for item in bookData.chapterArray {
             let chapterLabel = UILabel()
             chapterLabel.text = item
             chapterLabel.font = .systemFont(ofSize: 14)

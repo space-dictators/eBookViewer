@@ -24,7 +24,7 @@ final class BookIndexBarView: UIView {
         // 버튼을 담을 수평 스택 뷰 생성
         stackView.axis = .horizontal
         stackView.spacing = 10
-        stackView.distribution = .equalSpacing
+        stackView.distribution = .equalCentering
         stackView.alignment = .center
         
         // 스택 뷰 추가
@@ -44,8 +44,9 @@ final class BookIndexBarView: UIView {
         
         // TODO: 질문
         // 기존에 버튼이 있을 경우 삭제 구문 - Chapter와 엮어서
-        buttons.forEach { $0.removeFromSuperview() }
-        buttons.removeAll()
+        // 스크롤뷰와 테이블뷰 강의로 보충
+//        buttons.forEach { $0.removeFromSuperview() }
+//        buttons.removeAll()
         
         // 시리즈 숫자만큼 버튼 생성
         for index in 1...volumeCount {

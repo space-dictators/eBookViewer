@@ -11,7 +11,7 @@ import UIKit
 class BookListViewController: UIViewController {
     
     private let dataService = DataService()
-    private var decoratedBooks: [DecoratedBook] = []
+    private var bookDatas: [BookData] = []
     
     let titleLabel = BookTitleLabel()
     let indexBar = BookIndexBarView()
@@ -42,19 +42,20 @@ class BookListViewController: UIViewController {
     private func configureUI(_ books: [Book]) {
         
         // UI에 사용하기 위해 데이터 추가 가공
-        decoratedBooks = books.enumerated().map { index, book in
-            DecoratedBook(book: book, index: index)
+        bookDatas = books.enumerated().map { index, book in
+            BookData(book: book, index: index)
         }
         // 배경색
         view.backgroundColor = .white
         
         //마지막에 본 권수 취득
-        let savedVolume = UserDefaults.standard.integer(forKey: "LastSelectedVolume")
-        // 값이 없으면 0 → 그 경우 1로 대체
-        let initialVolume = (savedVolume == 0) ? 1 : savedVolume
+        let savedVolume = UserDefaults.standard.value(forKey: "LastSelectedVolume") as? Int
+        
+        // 값이 없으면 1로 대체
+        let initialVolume = savedVolume ?? 1
         
         //인덱스바 셋업
-        indexBar.setup(volumeCount: decoratedBooks.count, initialVolume: initialVolume)
+        indexBar.setup(volumeCount: bookDatas.count, initialVolume: initialVolume)
         
         indexBar.didSelectVolume = { [weak self] selectedVolume in
             guard let self else { return }
@@ -107,42 +108,37 @@ class BookListViewController: UIViewController {
         
         // 객체 인덱스 첫번째는 0이기 때문에 -1 변수 생성
         let index = volume - 1
-        let decoratedBook = decoratedBooks[index]
+        let bookData = bookDatas[index]
         
         // 최상단 제목 업데이트
-        titleLabel.updateTitleLabel(decoratedBook)
+        titleLabel.updateTitleLabel(bookData)
         
         // 책 정보 영역 업데이트
-        bookInfoStackView.updateBookInfo(decoratedBook)
+        bookInfoStackView.updateBookInfo(bookData)
         
         // 토글 관련 처리
         // 토글 컨트롤러 객체 생성
-        let summaryToggle = SummaryToggleController(volumeText: decoratedBook.volumeText)
+        let summaryToggle = SummaryToggleController(volumeText: bookData.volumeText)
 
         // SummaryToggleStatus 객체 생성
-        let toggleStatus = summaryToggle.createSummaryToggleStatus(decoratedBook)
+        let toggleStatus = summaryToggle.createSummaryToggleStatus(bookData)
         
-        /*
-         TODO: 작동 방식에 대해서
-         1. 실행시 클로저 이하의 구문 실행여부
-         2. 클로저 위에서 선언된 객체 사용
-         3. if else 안에 있을때
-         */
+    
 
         // 토글 버튼 클로저
         descriptionStackView.didToggle = { [weak self] in
             guard let self else { return }
             summaryToggle.toggle()
             
-            let status = summaryToggle.createSummaryToggleStatus(decoratedBook)
+            let status = summaryToggle.createSummaryToggleStatus(bookData)
             
             // 바뀐 값 적용하는 함수 실행
             self.descriptionStackView.updateSummary(status: status)
         }
         
-        descriptionStackView.updateDescriptonStackView(decoratedBook, summaryToggleStatus: toggleStatus)
+        descriptionStackView.updateDescriptonStackView(bookData, summaryToggleStatus: toggleStatus)
         
-        chapterStackView.updateChapter(decoratedBook)
+        chapterStackView.updateChapter(bookData)
         
     }
 }
