@@ -26,7 +26,8 @@ final class ScrollContainerView: UIView {
         // 스크롤 뷰 기본 설정
         addSubview(scrollView)
         scrollView.snp.makeConstraints { $0.edges.equalToSuperview() }
-
+        scrollView.showsVerticalScrollIndicator = false // 스크롤바 히든
+        
         // 콘텐츠를 담을 스택뷰 설정
         scrollView.addSubview(contentStackView)
         contentStackView.axis = .vertical
